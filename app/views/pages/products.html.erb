@@ -30,7 +30,7 @@
             <% end %>
             <li class="active"><%= @category.title %></li>
           <% else %>
-            <% if params[:f].present? %>
+            <% if @tag.present? || params[:f].present? %>
               <li class="active"><a href="<%= products_page_path %>">Productos</a></li>
             <% else %>
               <li class="active">Productos</li>
