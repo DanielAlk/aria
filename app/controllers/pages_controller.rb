@@ -26,6 +26,8 @@ class PagesController < ApplicationController
       @category = Category.friendly.find(params[:category_id])
       @products = @products.where(category: @category.subtree.map{|c| c})
       @products = @products.paginate(:page => params[:page], :per_page => params[:per_page] || 12)
+    elsif params[:f].present?
+      @products = @products.paginate(:page => params[:page], :per_page => params[:per_page] || 12)
     else
       @product_categories = Category.friendly.find('products').children
     end

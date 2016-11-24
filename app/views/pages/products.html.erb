@@ -30,7 +30,11 @@
             <% end %>
             <li class="active"><%= @category.title %></li>
           <% else %>
-            <li class="active">Productos</li>
+            <% if params[:f].present? %>
+              <li class="active"><a href="<%= products_page_path %>">Productos</a></li>
+            <% else %>
+              <li class="active">Productos</li>
+            <% end %>
           <% end %>
           <% if @category.present? && @category.has_children? %>
             <li class="category-select">
@@ -67,8 +71,12 @@
         </div>
         <div class="product-grid-col4">
           <ul>
-            <% @products.each do |product| %>
-              <%= render 'products/box', product: product  %>
+            <% if @products.blank? %>
+              <p>No se encontraron productos que coincidan con tu busqueda.</p>
+            <% else %>
+              <% @products.each do |product| %>
+                <%= render 'products/box', product: product  %>
+              <% end %>
             <% end %>
           </ul>
         </div>

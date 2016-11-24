@@ -78,6 +78,8 @@ footer .content-footer .contacto .telefonos .fa { color: #fff; font-size: 24px; 
 	&:before { display: inline-block; vertical-align: middle; content: ' » '; padding: 0 10px; color: #747474; font-size: 16px; }
 }
 
+.breadcrumbs ul li.active a { color: #fff; }
+
 @media only screen and (max-width: 760px) {
 	.category-select {
 		select { display: block; width: 100%; }
