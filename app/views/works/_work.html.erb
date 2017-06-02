@@ -1,0 +1,48 @@
+<div class="display" id="work_<%= work.id %>">
+	<div class="display-caption">
+		<div class="display-checkbox">
+			<label class="checkbox-inline">
+				<input class="checkbox-target" type="checkbox" name="work[ids][]" id="work_id_<%= work.id %>" value="<%= work.id %>">
+			</label>
+		</div>
+		<div class="display-actions">
+			<div class="btn-group btn-group-xs">
+				<%= link_to work, title: !work.active? ? 'Activar' : 'Pausar', class: 'tooltip-trigger btn btn-primary work-active-toggler', data: { util: 'update', hash: { work: { status: !work.active? ? 'active' : 'paused' } } } do %>
+				  <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+				  <i class="updated fa fa-fw fa-<%= !work.active? ? 'play' : 'pause' %>" aria-hidden="true"></i>
+				<% end %>
+				<%= link_to work, title: work.is_offer? ? 'Quitar oferta' : 'Marcar como oferta', class: 'tooltip-trigger btn btn-warning work-offer-toggler', data: { util: 'update', hash: { work: { special: work.is_offer? ? 'is_regular' : 'is_offer' } } } do %>
+					<i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+				  <i class="updated fa fa-fw fa-<%= work.is_offer? ? 'star' : 'star-o' %>" aria-hidden="true"></i>
+				<% end %>
+				<%= link_to work, title: work.is_new? ? 'Quitar nuevo' : 'Marcar como nuevo', class: 'tooltip-trigger btn btn-info work-new-toggler', data: { util: 'update', hash: { work: { special: work.is_new? ? 'is_regular' : 'is_new' } } } do %>
+				  <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+				  <i class="updated fa fa-fw fa-<%= work.is_new? ? 'flag' : 'flag-o' %>" aria-hidden="true"></i>
+				<% end %>
+				<%= link_to edit_work_path(work), title: 'Editar', class: 'btn btn-success tooltip-trigger' do %>
+				  <i class="fa fa-pencil fa-fw" aria-hidden="true"></i>
+				<% end %>
+				<%= link_to clone_work_path(work), title: 'Duplicar', method: :post, class: 'btn btn-primary tooltip-trigger disable-after-click' do %>
+				  <i class="disabled fa fa-spinner fa-pulse fa-fw"></i>
+				  <i class="enabled fa fa-files-o fa-fw" aria-hidden="true"></i>
+				<% end %>
+	      <%= link_to work, title: 'Eliminar', class: 'tooltip-trigger btn btn-danger', method: :delete, data: { confirm: '¿Seguro?' } do %>
+	        <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
+	      <% end %>
+			</div>
+		</div>
+		<a class="display-thumb" href="<%= work_path(work) %>" style="background-image:url(<%= asset_path work.image :thumb %>)"></a>
+		<div class="display-bottom">
+			<span id="work_status_<%= work.id %>" class="label label-<%= work.active? ? 'success' : work.draft? ? 'info' : 'danger' %>">
+				<%= work.status_translated %>
+			</span>
+			<% if work.category.present? %>
+				<span class="label label-primary"><%= work.category.title %></span>
+			<% end %>
+		</div>
+		<div class="display-body">
+			<h3 class="display-title"><%= link_to work.title, work %></h3>
+			<h4 class="display-subtitle"><%= work.description %></h4>
+		</div>
+	</div>
+</div>

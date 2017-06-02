@@ -2,7 +2,10 @@ Admin.create!(email: 'daniognr@hotmail.com', profile: 'administrator', password:
 
 Website.create!(address: 'Jorge 408, Adrogué - Buenos Aires', phone: '(+54 11) 3969.8286', mobile: '(+54 11) 15.3126.3521', email: 'info@ariaweb.com.ar', facebook: 'http://facebook.com', twitter: 'http://twitter.com', google: 'http://google.com', linkedin: 'http://linkedin.com', youtube: 'http://youtube.com')
 
-Category.create!({title: 'Productos', fixed: 'true', slug: 'products'})
+Category.create!([
+	{title: 'Productos', fixed: 'true', slug: 'products'},
+	{title: 'Obras', fixed: 'true', slug: 'works'}
+])
 
 Zone.create!([
 	{title: 'Ciudad Autónoma de Buenos Aires'},

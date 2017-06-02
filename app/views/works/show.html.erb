@@ -1,0 +1,111 @@
+<% content_for :extra_js do %>
+  Works.show();
+<% end %>
+
+<% content_for :panel_subtitle, @work.title %>
+
+<div class="btn-group pull-right btn-group-xs" style="margin-top: -60px;">
+  <%= link_to new_work_path, title: 'Nuevo', class: 'btn btn-warning tooltip-trigger' do %>
+    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to work_page_path(@work), title: 'Ver', id: 'work_page_link', target: '_blank', class: 'btn btn-info tooltip-trigger' + (@work.active? ? '' : ' hidden') do %>
+    <i class="fa fa-external-link fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to works_path, title: 'Listado', class: 'btn btn-success tooltip-trigger' do %>
+    <i class="fa fa-list fa-fw" aria-hidden="true"></i>
+  <% end %>
+</div>
+<div class="btn-group pull-right btn-group-xs" style="margin-top: -30px;">
+  <%= link_to @work, title: !@work.active? ? 'Activar' : 'Pausar', class: 'tooltip-trigger btn btn-primary', id: 'work_active_toggler', data: { util: 'update', hash: { work: { status: !@work.active? ? 'active' : 'paused' } } } do %>
+    <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="updated fa fa-fw fa-<%= @work.active? ? 'pause' : 'play' %>" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to edit_work_path(@work), title: 'Editar', class: 'btn btn-warning tooltip-trigger' do %>
+    <i class="fa fa-pencil fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to clone_work_path(@work), title: 'Duplicar', method: :post, class: 'btn btn-info tooltip-trigger disable-after-click' do %>
+    <i class="disabled fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="enabled fa fa-files-o fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to @work, title: 'Eliminar', class: 'btn btn-danger tooltip-trigger', method: :delete, data: { confirm: '¿Seguro?' } do %>
+    <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
+  <% end %>
+</div>
+
+<div style="padding-top:10px; border-top:1px solid;">
+  <h3 class="pull-right" style="margin:0;">
+    <span id="work_active_toggler_update" class="label label-<%= @work.active? ? 'success' : @work.draft? ? 'info' : 'danger' %>"><%= @work.status_translated %></span>
+  </h3>
+  <div class="clearfix"></div>
+  <h3 style="margin: 5px; 0;">
+    <%= @work.title %> - <small><%= @work.description %></small>
+  </h3>
+  <% if @work.category.present? %>
+    <span class="label label-primary"><%= @work.category.title %></span>
+  <% end %>
+</div>
+
+<div id="tabs-container" style="margin-top: 20px;">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#images_tab" aria-controls="images_tab" role="tab" data-toggle="tab">Imágenes</a>
+    </li>
+    <li role="presentation">
+      <a href="#data_tab" aria-controls="data_tab" role="tab" data-toggle="tab">Datos</a>
+    </li>
+    <li role="presentation">
+      <a href="#characteristics_tab" aria-controls="characteristics_tab" role="tab" data-toggle="tab">Caracteristicas</a>
+    </li>
+    <li role="presentation">
+      <a href="#data_sheet_tab" aria-controls="data_sheet_tab" role="tab" data-toggle="tab">Ficha técnica</a>
+    </li>
+    <li role="presentation">
+      <a href="#information_tab" aria-controls="information_tab" role="tab" data-toggle="tab">Info adicional</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="images_tab">
+      <div class="well" style="padding-right:0;">
+        <%= render 'partials/file_picker', resource: @work %>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="data_tab">
+      <div class="well">
+        <strong>Descripción:</strong>
+        <%= @work.description %>
+        <br>
+        <strong>Tags:</strong>
+        <%= @work.tags.list_to_s %>
+        <br>
+        <strong>Creado:</strong>
+        <%= @work.created_at.strftime('%d %b %Y - %I:%M %p') %>
+        <br>
+        <strong>Modificado:</strong>
+        <%= @work.updated_at.strftime('%d %b %Y - %I:%M %p') %>
+        <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;">
+          <strong>Link externo:</strong>
+          <%= link_to @work.external_link, @work.external_link, target: '_blank' if @work.external_link.present? %>
+        </span>
+        <strong>Ficha PDF:</strong>
+        <%= link_to 'Ver ficha.', @work.data_sheet_file.url, target: '_blank' if @work.data_sheet_file.present? %>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="characteristics_tab">
+      <p class="well">
+        <%= @work.characteristics.html_safe %>
+      </p>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="data_sheet_tab">
+      <p class="well">
+        <%= @work.data_sheet.html_safe %>
+      </p>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="information_tab">
+      <p class="well">
+        <%= @work.information.html_safe %>
+      </p>
+    </div>
+  </div>
+</div>

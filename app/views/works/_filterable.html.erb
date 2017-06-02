@@ -1,0 +1,34 @@
+<div class="filterable" id="filterable-works" style="padding-right:30px;">
+	<%= form_tag works_path, method: :get do %>
+		<div class="row">
+			<%= button_tag 'Buscar', type: :submit, class: 'btn btn-xs btn-success' %>
+			<div class="col-xs-6">
+				<div class="field">
+					<%= search_field_tag 'f[search]', filterable(:search), placeholder: 'Buscar' %>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="field">
+					<%= select_tag 'f[scopes][status]', filterable_select(works, :scopes, :status, exclude: :hidden), prompt: 'Status', class: 'selectpicker' %>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3">
+				<div class="field">
+					<%= select_tag 'f[scopes][special]', filterable_select(works, :scopes, :special), prompt: 'Marcado como', class: 'selectpicker' %>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="field">
+					<%= select_tag 'f[scopes][category]', filterable_select(works, :scopes, :category), prompt: 'Categoría', class: 'selectpicker' %>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="field">
+					<%= select_tag 'f[order]', filterable_select(works, :order), prompt: 'Ordenar', class: 'selectpicker' %>
+				</div>
+			</div>
+		</div>
+	<% end %>
+</div>

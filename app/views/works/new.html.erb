@@ -1,0 +1,9 @@
+<% content_for :panel_subtitle, 'Nueva Obra' %>
+
+<div class="btn-group pull-right btn-group-xs" style="margin-top: -30px;">
+  <%= link_to works_path, title: 'Listado', class: 'btn btn-success tooltip-trigger' do %>
+    <i class="fa fa-list fa-fw" aria-hidden="true"></i>
+  <% end %>
+</div>
+
+<%= render 'form' %>

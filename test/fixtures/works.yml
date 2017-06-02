@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  status: 1
+  special: 1
+  category_id: 
+  description: MyString
+  characteristics: MyText
+  data_sheet: MyText
+  information: MyText
+  external_link: MyString
+
+two:
+  title: MyString
+  status: 1
+  special: 1
+  category_id: 
+  description: MyString
+  characteristics: MyText
+  data_sheet: MyText
+  information: MyText
+  external_link: MyString

@@ -1,0 +1,93 @@
+<%= tinymce_init(200) %>
+
+<% content_for :extra_js do %>
+  Works.form();
+<% end %>
+
+<%= form_for(@work) do |f| %>
+  <% if @work.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@work.errors.count, "error") %> no permite guardar esta obra:</h2>
+
+      <ul>
+      <% @work.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="hidden">
+    <%= f.hidden_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :title, 'Título <em>*</em>'.html_safe %><br>
+    <%= f.text_field :title, minlength: 5, required: true, placeholder: 'Título' %>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="field">
+        <%= f.label :category_id, 'Categoría' %><br>
+        <%= f.select :category_id, (ancestry_options(Category.friendly.find('works').descendants.arrange) {|i| "#{'-' * (i.depth - 1)} #{i.title}" }), {selected: @work.category_id}, class: 'selectpicker' %>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="field">
+        <%= f.label :description, 'Descripción corta' %><br>
+        <%= f.text_field :description, maxlength: 20, placeholder: 'Descripción' %>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <%= hidden_field 'work[update_tags]', true %>
+    <%= label_tag 'work_tags', 'Tags' %>
+    <%= select_tag 'work[tags]', options_from_collection_for_select(Tag.all, :name, :name, @work.tags.map(&:name)), class: 'selectpicker-search', multiple: true, title: 'Seleccioná tags para esta obra' %>
+    <%= text_field_tag 'new_tag', nil, class: 'add_option_to_select', data: { select: '#work_tags' }, placeholder: 'Crear Tag' %>
+  </div>
+  <div class="field">
+    <%= f.label :external_link, 'Ficha oficial carrier (link)' %><br>
+    <%= f.text_field :external_link %>
+  </div>
+  <div class="field">
+    <%= f.label :data_sheet_file, 'Ficha PDF' %><br>
+    <%= f.file_field :data_sheet_file, accept: 'application/pdf' %>
+    <% if @work.data_sheet_file.present? %>
+      <small>Ya tienes una ficha pdf en esta obra</small>
+    <% end %>
+  </div>
+  <div id="tinymce_tabs">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#characteristics_tab" aria-controls="characteristics_tab" role="tab" data-toggle="tab">Caracteristicas</a>
+      </li>
+      <li role="presentation">
+        <a href="#data_sheet_tab" aria-controls="data_sheet_tab" role="tab" data-toggle="tab">Ficha técnica</a>
+      </li>
+      <li role="presentation">
+        <a href="#information_tab" aria-controls="information_tab" role="tab" data-toggle="tab">Información adicional</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="characteristics_tab">
+        <div class="field">
+          <%= f.text_area :characteristics, rows: 4, minlength: 15, class: 'tinymce' %>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="data_sheet_tab">
+        <div class="field">
+          <%= f.text_area :data_sheet, rows: 4, minlength: 15, class: 'tinymce' %>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="information_tab">
+        <div class="field">
+          <%= f.text_area :information, rows: 4, minlength: 15, class: 'tinymce' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Guardar obra' %>
+  </div>
+<% end %>

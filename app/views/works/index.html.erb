@@ -1,0 +1,61 @@
+<% content_for :extra_js do %>
+  Works.index();
+<% end %>
+
+<% content_for :panel_subtitle, 'Works' %>
+
+<%= render 'filterable', works: @works %>
+
+<div class="btn-group pull-right btn-group-xs" style="margin-top: -70px;">
+  <%= link_to new_work_path, title: 'Nuevo', class: 'btn btn-warning tooltip-trigger' do %>
+    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+  <% end %>
+</div>
+
+<div class="btn-group pull-right btn-group-xs" style="margin-top: -40px;">
+  <%= link_to 'javascript:void(0);', class: 'btn btn-default resource-checkbox tooltip-trigger', title: 'Seleccionar todos' do %>
+    <label class="checkbox-inline">
+      <input type="checkbox" name="select_all" data-target=".checkbox-target">
+    </label>
+  <% end %>
+  <%= link_to works_path, title: 'Activar seleccionados', class: 'btn btn-primary tooltip-trigger', disabled: true, data: { util: 'updateMany', ids: '.checkbox-target', hash: { work: { status: Work.statuses[:active] } } } do %>
+    <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="updated fa fa-play fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to works_path, title: 'Pausar seleccionados', class: 'btn btn-primary tooltip-trigger', disabled: true, data: { util: 'updateMany', ids: '.checkbox-target', hash: { work: { status: Work.statuses[:paused] } } } do %>
+    <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="updated fa fa-pause fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to works_path, title: 'Marcar como oferta', class: 'btn btn-warning tooltip-trigger', disabled: true, data: { util: 'updateMany', ids: '.checkbox-target', hash: { work: { special: Work.specials[:is_offer] } } } do %>
+    <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="updated fa fa-star fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to works_path, title: 'Marcar como nuevo', class: 'btn btn-info tooltip-trigger', disabled: true, data: { util: 'updateMany', ids: '.checkbox-target', hash: { work: { special: Work.specials[:is_new] } } } do %>
+    <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="updated fa fa-flag fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to works_path, title: 'Quitar marcas', class: 'btn btn-success tooltip-trigger', disabled: true, data: { util: 'updateMany', ids: '.checkbox-target', hash: { work: { special: Work.specials[:is_regular] } } } do %>
+    <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="updated fa fa-ban fa-fw" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to works_path, title: 'Borrar seleccionados', class: 'btn btn-danger tooltip-trigger', disabled: true, data: { util: 'deleteManyForm', target: '#destroy_all', ids: '.checkbox-target' } do %>
+    <i class="updating fa fa-spinner fa-pulse fa-fw"></i>
+    <i class="updated fa fa-trash fa-fw" aria-hidden="true"></i>
+  <% end %>
+</div>
+
+<div class="hidden">
+  <%= form_for works_path, html: { id: 'destroy_all' }, method: :delete, data: { confirm: '¿Seguro?' } {} %>
+</div>
+
+<!--div style="height: calc(82px * <%= @works.per_page %>)"-->
+<div>
+  <% if @works.present? %>
+    <%= render @works %>
+  <% else %>
+    No hay resultados
+  <% end %>
+</div>
+<div class="will-paginate">
+  <%= will_paginate @works, renderer: BootstrapPagination::Rails %>
+</div>
