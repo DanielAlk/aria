@@ -4,6 +4,7 @@ class Category < ActiveRecord::Base
 	has_ancestry
   has_many :products, :dependent => :restrict_with_error
   has_many :payment_products, :dependent => :restrict_with_error
+  has_many :works, :dependent => :restrict_with_error
   before_destroy :abort_if_fixed
 
 	validates_presence_of :title
@@ -21,6 +22,10 @@ class Category < ActiveRecord::Base
 			self.descendants.each do |c|
 				if c.products.present? || c.payment_products.present?
 					errors.add 'Categoría', 'No se puede eliminar ya que alguna subcategoría tiene productos asociados.'
+					return false
+				end
+				if c.works.present?
+					errors.add 'Categoría', 'No se puede eliminar ya que alguna subcategoría tiene obras asociadas.'
 					return false
 				end
 			end

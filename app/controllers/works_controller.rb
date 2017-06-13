@@ -145,6 +145,10 @@ class WorksController < ApplicationController
         end
       end
       # Tags END
+      if (params.require(:work).permit(:destroy_data_sheet_file)[:destroy_data_sheet_file].to_sym == :true rescue false)
+        work_params[:data_sheet_file] = nil
+        @work.data_sheet_file.clear
+      end
     end
     
     def set_works

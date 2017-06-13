@@ -1,0 +1,92 @@
+<% content_for :body_class, 'product-view-page' %>
+
+<% content_for :extra_js do %>
+  Pages.work();
+<% end %>
+
+<div class="slider">
+  <div><img src="<%= asset_path 'imgs_top/img_catalogo.jpg' %>" alt="Catálogo de Obras"></div>
+</div>
+<div class="content">
+  <div class="content-info">
+    <div class="breadcrumbs">
+      <ul>
+        <li><a href="<%= root_path %>">Home</a></li>
+        <li><a href="<%= works_page_path %>">Obras</a></li>
+        <% @work.category.ancestors.each do |category| %>
+          <% unless category.slug == 'works' %>
+            <li><a href="<%= works_page_path category %>"><%= category.title %></a></li>
+          <% end %>
+        <% end %>
+        <li><a href="<%= works_page_path @work.category %>"><%= @work.category.title %></a></li>
+        <li class="active"><%= @work.title %></li>
+      </ul>
+    </div>
+    <section>
+      <div class="product-view">
+        <div class="product-imagen">
+          <div class="image">
+            <%= image_tag @work.image(:medium), id: 'img_01', data: { zoom_image: @work.image(:big) } %>
+          </div>
+          <div id="galeria-thumbs" class="galeria owl-carousel">
+            <% @work.images.each_with_index do |img, index| %>
+              <%= link_to '#', data: { image: img.item.url(:medium), zoom_image: img.item.url(:big) } do %>
+                <%= image_tag img.item.url(:thumb), id: 'img_' + index.to_s %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">
+            <h1 class="title"><%= @work.title %></h1>
+          </div>
+          <div class="separador"></div>
+          <div class="caracteristicas">
+            <h3>Características</h3>
+            <p><%= @work.characteristics.html_safe %></p>
+          </div>
+          <div class="separador"></div>
+          <% if @work.external_link.present? %>
+            <a href="<%= @work.external_link %>" target="_blank" class="ver-ficha"> ver ficha oficial </a>
+          <% end %>
+          <div class="separador"></div>
+        </div>
+      </div>
+    </section>
+    <div class="product-descripcion">
+      <% tab_number = 0 %>
+      <% if @work.data_sheet_file.present? || @work.data_sheet.present? %>
+        <label class="tab<%= tab_number+=1 %> active">Ficha Técnica</label>
+        <div class="content-tab<%= tab_number %>" style="display:block;">
+          <%= link_to 'Ver ficha en pdf.', @work.data_sheet_file.url, class: 'gral-btn', target: '_blank' if @work.data_sheet_file.present? %>
+          <p><%= @work.data_sheet.html_safe %></p>
+        </div>
+      <% end %>
+      <% if @work.information.present? %>
+        <label class="tab<%= tab_number+=1 %> <%= 'active' if tab_number == 1 %>">información <%= 'adicional' if tab_number == 2 %></label>
+        <div class="content-tab<%= tab_number %>" style="<%=  'display:block' if tab_number == 1 %>">
+          <p><%= @work.information.html_safe %></p>
+        </div>
+      <% end %>
+      <% if @work.tags.present? %>
+        <label class="tab<%= tab_number+=1 %> <%= 'active' if tab_number == 1 %>">tags</label>
+        <div class="content-tab<%= tab_number %> content-tab-tag" style="<%=  'display:block' if tab_number == 1 %>">
+          <% @work.tags.each do |tag| %>
+            <p><a href="<%= work_tag_page_path(tag) %>"><%= tag.name %></a></p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <% if @related_works.present? %>
+      <section class="relacionados">
+        <h2>Obras Relacionadas</h2>
+        <ul id="relacionados" class="carrusel owl-carousel">
+          <% @related_works.each do |work| %>
+            <%= render 'works/box', work: work  %>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+    <%= render 'partials/social_media' %>
+  </div>
+</div>

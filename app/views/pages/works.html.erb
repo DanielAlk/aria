@@ -1,0 +1,90 @@
+<% content_for :body_class, 'catalogo' %>
+
+<% content_for :extra_js do %>
+  Pages.works();
+  $('#category-select').change(function() {
+    var val = $(this).val();
+    if (!!val) window.location.href = val;
+  });
+<% end %>
+
+<div class="slider">
+  <div><img src="<%= asset_path 'imgs_top/img_catalogo.jpg' %>" alt="Catálogo de Obras"></div>
+</div>
+<div class="content">
+  <div class="content-info">
+    <div class="breadcrumbs <%= 'breadcrumbs-mobile' if browser.device.mobile? %>">
+      <ul>
+        <% if browser.device.mobile? %>
+          <li class="category-select">
+            <%= select_tag 'category-select', options_for_select(ancestry_work_categories(Category.friendly.find('works').subtree.arrange), works_page_path(@category)) %>
+          </li>
+        <% else %>
+          <li><a href="<%= root_path %>">Home</a></li>
+          <% if @category.present? %>
+            <li><a href="<%= works_page_path %>">Obras</a></li>
+            <% @category.ancestors.each do |category| %>
+              <% unless category.slug == 'works' %>
+                <li><a href="<%= works_page_path category %>"><%= category.title %></a></li>
+              <% end %>
+            <% end %>
+            <li class="active"><%= @category.title %></li>
+          <% else %>
+            <% if @tag.present? || params[:f].present? %>
+              <li class="active"><a href="<%= works_page_path %>">Obras</a></li>
+            <% else %>
+              <li class="active">Obras</li>
+            <% end %>
+          <% end %>
+          <% if @category.present? && @category.has_children? %>
+            <li class="category-select">
+              <%= select_tag 'category-select', options_for_select(@category.children.map{|c| [c.title, works_page_path(c)]}), prompt: 'Sub categoría' %>
+            </li>
+          <% elsif @category.blank? %>
+            <li class="category-select">
+              <%= select_tag 'category-select', options_for_select(Category.friendly.find('works').children.map{|c| [c.title, works_page_path(c)]}), prompt: 'Sub categoría' %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+    <% if @work_categories.present? %>
+      <div class="content-info-like-home">
+        <% @work_categories.each do |category| %>
+          <% works = Work.active.where(category: category.subtree.map{|c| c}).order(special: :desc).take(7) %>
+          <% if works.present? %>
+            <section class="<%= 'first' if @first_category_rendered.blank? && (@first_category_rendered = true) %>">
+              <h2><%= link_to category.title, works_page_path(category), style: 'color:inherit' %></h2>
+              <ul id="<%= category.slug %>" class="carrusel owl-carousel">
+                <% works.each do |work| %>
+                  <%= render 'works/box', work: work  %>
+                <% end %>
+              </ul>
+            </section>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <section>
+        <div class="filtros">
+          <%= render 'works/page_filters' %>
+        </div>
+        <div class="product-grid-col4">
+          <ul>
+            <% if @works.blank? %>
+              <p>No se encontraron obras que coincidan con tu busqueda.</p>
+            <% else %>
+              <% @works.each do |work| %>
+                <%= render 'works/box', work: work  %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+        <div class="filtros bottom">
+          <%= render 'works/page_filters' %>
+        </div>
+      </section>
+    <% end %>
+    <%= render 'partials/social_media' %>
+  </div>
+</div>

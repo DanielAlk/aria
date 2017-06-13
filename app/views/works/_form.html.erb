@@ -51,9 +51,10 @@
   <div class="field">
     <%= f.label :data_sheet_file, 'Ficha PDF' %><br>
     <%= f.file_field :data_sheet_file, accept: 'application/pdf' %>
-    <% if @work.data_sheet_file.present? %>
-      <small>Ya tienes una ficha pdf en esta obra</small>
-    <% end %>
+    <div class="destroy-data-sheet-file-container" style="<%= 'display:none' unless @work.data_sheet_file.present? %>">
+      <input type="hidden" name="work[destroy_data_sheet_file]" id="work_destroy_data_sheet_file">
+      <small><a href="#" class="btn btn-xs btn-danger destroy-data-sheet-file-trigger">Eliminar ficha pdf</a> Ya tienes una ficha pdf en esta obra</small>
+    </div>
   </div>
   <div id="tinymce_tabs">
     <ul class="nav nav-tabs" role="tablist">

@@ -18,6 +18,7 @@ module Filterize
 		filterize_options = self.class.filterize_options
 		@filterable = params[filterize_options[:param] || :filterable]
 		object = filterize_options[:object].to_s.titlecase.constantize rescue false
+		object = filterize_options[:object].call(params).to_s.titlecase.constantize rescue false
 		object = object || self.class.name.sub('Controller', '').singularize.constantize
 		collection = object.where(nil)
 		if @filterable.present?

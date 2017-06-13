@@ -413,7 +413,7 @@
                     margin-bottom: 10px;
                 }
                 
-                &.content-tab3{
+                &.content-tab3, &.content-tab1.content-tab-tag, &.content-tab2.content-tab-tag {
                     p{
                         margin-bottom: 10px;
                         display: inline-block;

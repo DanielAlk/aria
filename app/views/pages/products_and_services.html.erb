@@ -21,6 +21,9 @@
 					<a href="<%= services_page_path %>" class="select-box">
 						<h3 class="select-box-title">Servicios</h3>
 					</a>
+					<a href="<%= works_page_path %>" class="select-box">
+						<h3 class="select-box-title">Instalación y mantenimiento</h3>
+					</a>
 					<% @articles.each do |article| %>
 						<a href="<%= service_page_path(article) %>" class="select-box">
 							<h3 class="select-box-title"><%= article.title %></h3>

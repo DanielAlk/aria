@@ -92,6 +92,56 @@ Pages.product = function(product) {
 	});
 };
 
+Pages.works = function() {
+	$('.works-page-filters select').change(function(e) {
+	  $(this).closest('form').submit();
+	});
+	$('section .owl-carousel').owlCarousel({
+		loop:false,
+		items:1,
+		slideBy:1,
+		margin:0,
+		nav: true,
+		dots: false,
+		responsive:{
+			0:{items:1},
+			650:{items:2},
+			800:{items:3},
+			1025:{items:4},
+			1251:{items:5}
+		}
+	});
+};
+
+Pages.work = function() {
+	AriaProductInit();
+	$('#galeria-thumbs.owl-carousel').owlCarousel({
+	  loop:false,
+	  items:3,
+	  margin:0,
+	  nav:true,
+	  dots:false,
+	  responsive:{
+	      0:{ items:3}
+	  }
+	});	
+	$('section.relacionados .owl-carousel').owlCarousel({
+	  loop:false,
+	  items:1,
+	  slideBy:1,
+	  margin:0,
+	  nav: true,
+	  dots: false,
+	  responsive:{
+	    0:{items:1},
+	    650:{items:2},
+	    800:{items:3},
+	    1025:{items:4},
+	    1251:{items:5}
+	  }
+	});
+};
+
 Pages.carousel = function() {
 	$('.slider.owl-carousel').owlCarousel({
 	  loop:true,

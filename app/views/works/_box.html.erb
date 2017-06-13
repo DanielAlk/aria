@@ -1,0 +1,20 @@
+<li>
+  <div class="caja-producto">
+    <% if work.is_new? %>
+      <div class="cucarda"> <span class="triangulo"></span> <span class="txt">Nuevo</span> </div>
+    <% elsif work.is_offer? %>
+      <div class="cucarda oferta"> <span class="triangulo"></span> <span class="txt">Oferta</span> </div>
+    <% end %>
+    <div class="img-product">
+    	<%= link_to work_page_path(work), title: work.title do %>
+    		<img src="<%= work.image :small %>" alt="<%= work.title %>" title="<%= work.title %>">
+  		<% end %>
+    </div>
+    <div class="producto-info">
+      <div class="tipo-product"><%= work.description %></div>
+      <div class="nombre-product">
+      	<%= link_to work.title.upcase, work_page_path(work), title: work.title %>
+      </div>
+    </div>
+  </div>
+</li>

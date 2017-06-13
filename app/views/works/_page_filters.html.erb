@@ -1,0 +1,19 @@
+<% form_url = @tag.present? ? tag_page_path(@tag) : works_page_path(@category) %>
+
+<%= form_tag form_url, method: :get, class: 'works-page-filters' do %>
+	<div style="display:none;">
+		<%= submit_tag %>
+	</div>
+	<div class="ordenar">
+		&nbsp;
+	</div>
+	<div class="cantidad">
+	  <label>Mostrar</label>
+	  <%= select_tag 'per_page', options_for_select([12,24,36], params[:per_page]), class: 'cantidades' %>
+	  <span>Por Página</span>
+	</div>
+	<div class="paginador">
+	  <!--label>Página</label-->
+	  <%= will_paginate @works, :renderer => PaginationHelper::LinkRenderer, outer_window: 0, inner_window: 1 %>
+	</div>
+<% end %>

@@ -84,4 +84,20 @@ Works.form = function() {
 	  e.preventDefault()
 	  $(this).tab('show')
 	});
+	//destroy data sheet file
+	(function($container, $input, $trigger) {
+		var trigger = function(e) {
+			e.preventDefault();
+			var $fileInput = $('#work_data_sheet_file');
+			$input.val(true);
+			$container.fadeOut();
+			$fileInput.replaceWith($fileInput.val('').clone());
+		};
+		var fileSelected = function(e) {
+			$input.val(false);
+			$container.fadeIn();
+		};
+		$trigger.click(trigger);
+		$(document).on('change', '#work_data_sheet_file', fileSelected);
+	})($('.destroy-data-sheet-file-container'), $('#work_destroy_data_sheet_file'), $('.destroy-data-sheet-file-trigger'));
 };

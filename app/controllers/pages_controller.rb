@@ -3,8 +3,8 @@ class PagesController < ApplicationController
   include Filterize
   before_action :authenticate_user!, only: [:cart, :checkout, :confirm]
   before_action :set_cart, only: [:cart, :checkout]
-  before_action :filterize, only: [:products, :tag]
-  filterize object: :product, order: :special_desc, scope: :active, param: :f
+  before_action :filterize, only: [:products, :tag, :works, :work_tag]
+  filterize object: Proc.new { |p| [:works, :work_tag].include?(p[:action].to_sym) ? :work : :product }, order: :special_desc, scope: :active, param: :f
   layout 'soon', only: :soon
   
   def home
@@ -43,6 +43,30 @@ class PagesController < ApplicationController
   def product
     @product = Product.active.friendly.find(params[:product_id])
     @related_products = @product.category.products.active.where.not(id: @product.id).limit(10).shuffle
+  end
+
+  def works
+    if params[:category_id].present?
+      @category = Category.friendly.find(params[:category_id])
+      @works = @works.where(category: @category.subtree.map{|c| c})
+      @works = @works.paginate(:page => params[:page], :per_page => params[:per_page] || 12)
+    elsif params[:f].present?
+      @works = @works.paginate(:page => params[:page], :per_page => params[:per_page] || 12)
+    else
+      @work_categories = Category.friendly.find('works').children
+    end
+  end
+
+  def work
+    @work = Work.active.friendly.find(params[:work_id])
+    @related_works = @work.category.works.active.where.not(id: @work.id).limit(10).shuffle
+  end
+
+  def work_tag
+    @tag = Tag.friendly.find(params[:tag_id])
+    @works = @works.where(id: Tagging.where(taggable_type: 'Work', tag_id: @tag.id ).map(&:taggable_id))
+    @works = @works.paginate(:page => params[:page], :per_page => params[:per_page] || 12)
+    render :works
   end
 
   def cart

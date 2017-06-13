@@ -24,4 +24,14 @@ module ApplicationHelper
 	  end
 	  result
 	end
+
+	def ancestry_work_categories(items)
+	  result = []
+	  items.map do |item, sub_items|
+	    result << ["#{'-' * item.depth} #{item.title}", works_page_path] if item.slug.to_sym == :works
+	    result << ["#{'-' * item.depth} #{item.title}", works_page_path(item)] if item.slug.to_sym != :works
+	    result += ancestry_work_categories(sub_items)
+	  end
+	  result
+	end
 end
