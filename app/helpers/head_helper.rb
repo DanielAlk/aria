@@ -14,6 +14,10 @@ module HeadHelper
 				title = (@category.title rescue 'Productos') + ' | '
 			when :product
 				title = @product.title + ' | '
+			when :works, :work_tag
+				title = (@category.title rescue 'Obras') + ' | '
+			when :work
+				title = @work.title + ' | '
 			when :cart
 				title = 'Carrito | '
 			when :checkout
